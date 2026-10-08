@@ -1,0 +1,2784 @@
+```html
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guarda Sol</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f4f4;
+    color:#222;
+}
+
+header{
+    background:#111;
+    color:white;
+    padding:20px;
+    text-align:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+header h1{
+    margin:0;
+}
+
+header p{
+    margin:5px 0 15px;
+    color:#ccc;
+}
+
+nav{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+}
+
+button{
+    border:0;
+    border-radius:8px;
+    padding:10px 15px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+nav button{
+    background:#333;
+    color:white;
+}
+
+nav button:hover{
+    background:#555;
+}
+
+.pagina{
+    display:none;
+    max-width:1100px;
+    margin:auto;
+    padding:25px;
+}
+
+.pagina.ativa{
+    display:block;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    margin:15px 0;
+    border-radius:14px;
+    box-shadow:0 3px 12px #0001;
+}
+
+input, select, textarea{
+    width:100%;
+    padding:11px;
+    margin:6px 0 12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.btn{
+    background:#111;
+    color:white;
+}
+
+.btn:hover{
+    opacity:.85;
+}
+
+.btn-verde{
+    background:#16803c;
+    color:white;
+}
+
+.btn-vermelho{
+    background:#b3261e;
+    color:white;
+}
+
+.btn-azul{
+    background:#1769aa;
+    color:white;
+}
+
+.btn-amarelo{
+    background:#d99a00;
+    color:white;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.prato{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:16px;
+    background:#fff;
+}
+
+.prato h3{
+    margin-top:0;
+}
+
+.preco{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.adicional{
+    background:#f7f7f7;
+    padding:8px;
+    border-radius:8px;
+    margin:5px 0;
+}
+
+.carrinho-item{
+    border-bottom:1px solid #ddd;
+    padding:12px 0;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    background:#eee;
+    font-size:13px;
+}
+
+.alerta{
+    background:#fff3cd;
+    border:1px solid #ffe08a;
+    padding:12px;
+    border-radius:10px;
+}
+
+.sucesso{
+    background:#d1e7dd;
+    padding:12px;
+    border-radius:10px;
+}
+
+.erro{
+    background:#f8d7da;
+    padding:12px;
+    border-radius:10px;
+}
+
+.admin-card{
+    border-left:5px solid #111;
+}
+
+.stat{
+    background:#111;
+    color:white;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.stat strong{
+    display:block;
+    font-size:28px;
+    margin-top:8px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+/* Modal */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0009;
+    z-index:5000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.ativo{
+    display:flex;
+}
+
+.modal-conteudo{
+    background:white;
+    max-width:600px;
+    width:100%;
+    max-height:90vh;
+    overflow:auto;
+    border-radius:15px;
+    padding:25px;
+}
+
+/* Proteção visual */
+::selection{
+    background:transparent;
+}
+
+@media(max-width:600px){
+    .pagina{
+        padding:15px;
+    }
+
+    nav button{
+        flex:1 1 45%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Guarda Sol</h1>
+    <p>Restaurante na Póvoa de Varzim</p>
+
+    <nav>
+        <button onclick="mostrarPagina('inicio')">Início</button>
+        <button onclick="mostrarPagina('menu')">Menu</button>
+        <button onclick="mostrarPagina('pedido')">Pedido</button>
+        <button onclick="mostrarPagina('reservar')">Reservar</button>
+        <button onclick="mostrarPagina('acompanhar')">Acompanhar</button>
+        <button onclick="mostrarPagina('funcionario')">Funcionário</button>
+        <button onclick="mostrarPagina('apoio')">Apoio</button>
+        <button onclick="mostrarPagina('reclamacao')">Reclamação</button>
+        <button onclick="mostrarPagina('administracao')">Administração</button>
+    </nav>
+</header>
+
+<!-- INÍCIO -->
+<section id="inicio" class="pagina ativa">
+    <div class="card">
+        <h2>Guarda Sol</h2>
+        <p>Restaurante na Póvoa de Varzim</p>
+
+        <div class="grid">
+            <button class="btn" onclick="mostrarPagina('menu')">🍽️ Ver Menu</button>
+            <button class="btn" onclick="mostrarPagina('reservar')">🪑 Reservar Mesa</button>
+            <button class="btn" onclick="mostrarPagina('pedido')">🛒 Fazer Pedido</button>
+            <button class="btn" onclick="mostrarPagina('acompanhar')">📦 Acompanhar Pedido</button>
+            <button class="btn" onclick="mostrarPagina('funcionario')">🔔 Chamar Funcionário</button>
+            <button class="btn" onclick="mostrarPagina('apoio')">💬 Apoio ao Cliente</button>
+        </div>
+    </div>
+</section>
+
+<!-- MENU -->
+<section id="menu" class="pagina">
+
+    <div class="card">
+        <h2>🍽️ Menu</h2>
+
+        <input
+            type="text"
+            id="pesquisaMenu"
+            placeholder="Pesquisar prato..."
+            oninput="mostrarMenu()"
+        >
+
+        <div id="categoriasMenu"></div>
+    </div>
+
+    <div id="listaMenu" class="grid"></div>
+</section>
+
+<!-- PEDIDO -->
+<section id="pedido" class="pagina">
+
+    <div class="card">
+        <h2>🛒 O seu pedido</h2>
+
+        <label>Nome</label>
+        <input id="nomePedido" placeholder="O seu nome">
+
+        <label>Mesa</label>
+        <select id="mesaPedido"></select>
+
+        <div id="carrinho"></div>
+
+        <h3>Total: <span id="totalPedido">0.00 €</span></h3>
+
+        <label>Dividir conta por quantas pessoas?</label>
+        <input
+            id="dividirPessoas"
+            type="number"
+            min="1"
+            value="1"
+            oninput="mostrarCarrinho()"
+        >
+
+        <p>
+            Valor por pessoa:
+            <strong id="valorPessoa">0.00 €</strong>
+        </p>
+
+        <button class="btn-verde" onclick="enviarPedido()">
+            Confirmar pedido
+        </button>
+    </div>
+</section>
+
+<!-- RESERVAR -->
+<section id="reservar" class="pagina">
+
+    <div class="card">
+        <h2>🪑 Reservar Mesa</h2>
+
+        <label>Nome</label>
+        <input id="nomeReserva">
+
+        <label>Data</label>
+        <input id="dataReserva" type="date">
+
+        <label>Hora</label>
+        <input id="horaReserva" type="time">
+
+        <label>Número de pessoas</label>
+        <input id="pessoasReserva" type="number" min="1" value="2">
+
+        <label>Mesa</label>
+        <select id="mesaReserva"></select>
+
+        <button class="btn" onclick="fazerReserva()">
+            Confirmar reserva
+        </button>
+
+        <div id="resultadoReserva"></div>
+    </div>
+</section>
+
+<!-- ACOMPANHAR -->
+<section id="acompanhar" class="pagina">
+
+    <div class="card">
+        <h2>📦 Acompanhar pedido</h2>
+
+        <input id="numeroAcompanhar" placeholder="Ex.: GS-123456789">
+
+        <button class="btn" onclick="acompanharPedido()">
+            Consultar
+        </button>
+
+        <div id="resultadoAcompanhar"></div>
+    </div>
+</section>
+
+<!-- FUNCIONÁRIO -->
+<section id="funcionario" class="pagina">
+
+    <div class="card">
+        <h2>🔔 Chamar funcionário</h2>
+
+        <label>Mesa</label>
+        <select id="mesaFuncionario"></select>
+
+        <label>Motivo</label>
+        <select id="motivoFuncionario">
+            <option>Preciso de ajuda</option>
+            <option>Quero pedir a conta</option>
+            <option>Quero fazer um pedido</option>
+            <option>Quero água</option>
+            <option>Quero talheres</option>
+            <option>Outro</option>
+        </select>
+
+        <label>Mensagem</label>
+        <textarea id="mensagemFuncionario"></textarea>
+
+        <button class="btn-amarelo" onclick="chamarFuncionario()">
+            🔔 Chamar funcionário
+        </button>
+
+        <div id="resultadoFuncionario"></div>
+    </div>
+</section>
+
+<!-- APOIO -->
+<section id="apoio" class="pagina">
+
+    <div class="card">
+        <h2>💬 Apoio ao Cliente</h2>
+
+        <label>Nome</label>
+        <input id="nomeApoio">
+
+        <label>Número do pedido (opcional)</label>
+        <input id="pedidoApoio">
+
+        <label>Assunto</label>
+        <select id="topicoApoio" onchange="mostrarOutroTopico()">
+            <option>Menu</option>
+            <option>Pedido</option>
+            <option>Estado do pedido</option>
+            <option>Reserva</option>
+            <option>Pagamento / Conta</option>
+            <option>Funcionário</option>
+            <option>Reclamação</option>
+            <option>Sugestão</option>
+            <option>Outro</option>
+        </select>
+
+        <div id="outroTopicoBox" style="display:none;">
+            <label>Qual é o assunto?</label>
+            <input id="outroTopico">
+        </div>
+
+        <label>Mensagem</label>
+        <textarea id="mensagemApoio"></textarea>
+
+        <button class="btn-azul" onclick="enviarApoio()">
+            Enviar pedido de apoio
+        </button>
+
+        <div id="resultadoApoio"></div>
+    </div>
+
+    <div class="card">
+        <h3>Consultar ticket</h3>
+
+        <input id="consultarTicket" placeholder="Ex.: AT-123456789">
+
+        <button class="btn" onclick="consultarTicket()">
+            Consultar ticket
+        </button>
+
+        <div id="resultadoTicket"></div>
+    </div>
+</section>
+
+<!-- RECLAMAÇÃO -->
+<section id="reclamacao" class="pagina">
+
+    <div class="card">
+        <h2>😡 Reclamações e sugestões</h2>
+
+        <label>Nome</label>
+        <input id="nomeReclamacao">
+
+        <label>Mensagem</label>
+        <textarea id="mensagemReclamacao"></textarea>
+
+        <button class="btn-vermelho" onclick="enviarReclamacao()">
+            Enviar
+        </button>
+
+        <div id="resultadoReclamacao"></div>
+    </div>
+</section>
+
+<!-- ADMIN -->
+<section id="administracao" class="pagina">
+
+    <div id="loginAdmin" class="card">
+        <h2>🔐 Administração</h2>
+
+        <input
+            id="pinAdmin"
+            type="password"
+            placeholder="Código de administrador"
+        >
+
+        <button class="btn" onclick="entrarAdmin()">
+            Entrar
+        </button>
+
+        <div id="erroAdmin"></div>
+    </div>
+
+    <div id="painelAdmin" style="display:none;">
+
+        <div class="card">
+            <h2>📊 Administração Guarda Sol</h2>
+
+            <div class="grid">
+                <div class="stat">
+                    Pedidos
+                    <strong id="estatNumeroPedidos">0</strong>
+                </div>
+
+                <div class="stat">
+                    Vendas
+                    <strong id="estatVendas">0.00 €</strong>
+                </div>
+
+                <div class="stat">
+                    Custos
+                    <strong id="estatCustos">0.00 €</strong>
+                </div>
+
+                <div class="stat">
+                    Lucro
+                    <strong id="estatLucro">0.00 €</strong>
+                </div>
+
+                <div class="stat">
+                    Pessoas
+                    <strong id="estatPessoas">0</strong>
+                </div>
+
+                <div class="stat">
+                    Chamadas pendentes
+                    <strong id="contadorChamadas">0</strong>
+                </div>
+
+                <div class="stat">
+                    Apoios pendentes
+                    <strong id="contadorApoio">0</strong>
+                </div>
+            </div>
+
+            <div id="aconselhamento" class="alerta" style="margin-top:15px;"></div>
+        </div>
+
+        <!-- CATEGORIAS -->
+        <div class="card admin-card">
+            <h2>📂 Categorias</h2>
+
+            <input id="novaCategoria" placeholder="Nome da categoria">
+
+            <button class="btn" onclick="adicionarCategoria()">
+                Adicionar categoria
+            </button>
+
+            <div id="listaCategoriasAdmin"></div>
+        </div>
+
+        <!-- PRATOS -->
+        <div class="card admin-card">
+            <h2>🍽️ Criar prato</h2>
+
+            <input id="novoPratoNome" placeholder="Nome do prato">
+
+            <select id="novoPratoCategoria"></select>
+
+            <textarea
+                id="novoPratoDescricao"
+                placeholder="Descrição"
+            ></textarea>
+
+            <input
+                id="novoPratoPreco"
+                type="number"
+                step="0.01"
+                placeholder="Preço de venda"
+            >
+
+            <input
+                id="novoPratoCusto"
+                type="number"
+                step="0.01"
+                placeholder="Custo do prato"
+            >
+
+            <h3>Adicionais</h3>
+
+            <div id="novosAdicionais"></div>
+
+            <button class="btn-azul" onclick="adicionarCampoAdicional()">
+                + Adicionar adicional
+            </button>
+
+            <br><br>
+
+            <button class="btn-verde" onclick="adicionarPrato()">
+                Criar prato
+            </button>
+
+            <div id="listaPratosAdmin"></div>
+        </div>
+
+        <!-- PEDIDOS -->
+        <div class="card admin-card">
+            <h2>📋 Pedidos</h2>
+            <div id="adminPedidos"></div>
+        </div>
+
+        <!-- RESERVAS -->
+        <div class="card admin-card">
+            <h2>📅 Reservas</h2>
+            <div id="adminReservas"></div>
+        </div>
+
+        <!-- CHAMADAS -->
+        <div class="card admin-card">
+            <h2>🔔 Chamadas de funcionários</h2>
+            <div id="adminChamadas"></div>
+        </div>
+
+        <!-- APOIO -->
+        <div class="card admin-card">
+            <h2>💬 Apoio ao cliente</h2>
+            <div id="adminApoio"></div>
+        </div>
+
+        <!-- RECLAMAÇÕES -->
+        <div class="card admin-card">
+            <h2>😡 Reclamações</h2>
+            <div id="adminReclamacoes"></div>
+        </div>
+
+        <!-- ALTERAR PIN -->
+        <div class="card admin-card">
+            <h2>🔐 Alterar PIN</h2>
+
+            <input
+                id="novoPin"
+                type="password"
+                placeholder="Novo PIN"
+            >
+
+            <button class="btn" onclick="alterarPin()">
+                Alterar PIN
+            </button>
+
+            <div id="resultadoPin"></div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    Guarda Sol © 2026
+</footer>
+
+<script>
+/* =========================================================
+   PROTEÇÃO BÁSICA
+   ========================================================= */
+
+document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+});
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "F12"){
+        e.preventDefault();
+        return false;
+    }
+
+    if(e.ctrlKey && e.shiftKey &&
+       ["I","J","C"].includes(e.key.toUpperCase())){
+        e.preventDefault();
+        return false;
+    }
+
+    if(e.ctrlKey && e.key.toUpperCase() === "U"){
+        e.preventDefault();
+        return false;
+    }
+});
+
+
+/* =========================================================
+   BASE DE DADOS LOCAL
+   ========================================================= */
+
+const DB = {
+
+    get(chave, padrao=[]){
+        try{
+            const dados = localStorage.getItem(chave);
+
+            if(dados === null){
+                return padrao;
+            }
+
+            return JSON.parse(dados);
+
+        }catch(e){
+            return padrao;
+        }
+    },
+
+    set(chave, dados){
+        localStorage.setItem(chave, JSON.stringify(dados));
+    }
+
+};
+
+
+/* =========================================================
+   CONFIGURAÇÃO
+   ========================================================= */
+
+if(!localStorage.getItem("gs_admin_pin")){
+    localStorage.setItem("gs_admin_pin","844870");
+}
+
+
+/* =========================================================
+   DADOS INICIAIS
+   ========================================================= */
+
+if(!localStorage.getItem("gs_categories")){
+
+    DB.set("gs_categories",[
+        "Entradas",
+        "Francesinhas",
+        "Hambúrgueres",
+        "Peixe",
+        "Carne",
+        "Sobremesas",
+        "Bebidas"
+    ]);
+}
+
+if(!localStorage.getItem("gs_dishes")){
+
+    DB.set("gs_dishes",[
+
+        {
+            id:1,
+            name:"Francesinha",
+            category:"Francesinhas",
+            description:"Francesinha tradicional Guarda Sol.",
+            price:12.50,
+            cost:6,
+            addons:[
+                {name:"Ovo",price:1},
+                {name:"Batata",price:2},
+                {name:"Extra queijo",price:1.50},
+                {name:"Extra molho",price:.50}
+            ]
+        },
+
+        {
+            id:2,
+            name:"Hambúrguer Guarda Sol",
+            category:"Hambúrgueres",
+            description:"Hambúrguer especial da casa.",
+            price:9.50,
+            cost:4,
+            addons:[
+                {name:"Queijo",price:1},
+                {name:"Bacon",price:1.50},
+                {name:"Ovo",price:1}
+            ]
+        }
+
+    ]);
+}
+
+if(!localStorage.getItem("gs_orders")){
+    DB.set("gs_orders",[]);
+}
+
+if(!localStorage.getItem("gs_reservations")){
+    DB.set("gs_reservations",[]);
+}
+
+if(!localStorage.getItem("gs_calls")){
+    DB.set("gs_calls",[]);
+}
+
+if(!localStorage.getItem("gs_support")){
+    DB.set("gs_support",[]);
+}
+
+if(!localStorage.getItem("gs_complaints")){
+    DB.set("gs_complaints",[]);
+}
+
+
+/* =========================================================
+   VARIÁVEIS
+   ========================================================= */
+
+let cart=[];
+
+
+/* =========================================================
+   FUNÇÕES GERAIS
+   ========================================================= */
+
+function safe(text){
+
+    return String(text ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function mostrarPagina(id){
+
+    document.querySelectorAll(".pagina").forEach(p=>{
+        p.classList.remove("ativa");
+    });
+
+    const pagina=document.getElementById(id);
+
+    if(pagina){
+        pagina.classList.add("ativa");
+    }
+
+    if(id==="menu"){
+        mostrarMenu();
+    }
+
+    if(id==="pedido"){
+        mostrarCarrinho();
+    }
+
+    if(id==="administracao"){
+        if(document.getElementById("painelAdmin").style.display==="block"){
+            atualizarAdmin();
+        }
+    }
+}
+
+
+/* =========================================================
+   MESAS
+   ========================================================= */
+
+function criarMesas(){
+
+    const ids=[
+        "mesaPedido",
+        "mesaReserva",
+        "mesaFuncionario"
+    ];
+
+    ids.forEach(id=>{
+
+        const select=document.getElementById(id);
+
+        if(!select) return;
+
+        select.innerHTML='<option value="">Escolher mesa</option>';
+
+        for(let i=1;i<=30;i++){
+
+            const option=document.createElement("option");
+
+            option.value=i;
+            option.textContent="Mesa "+i;
+
+            select.appendChild(option);
+        }
+    });
+}
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+function obterMenu(){
+    return DB.get("gs_dishes",[]);
+}
+
+
+function mostrarMenu(){
+
+    const pratos=obterMenu();
+
+    const pesquisa=
+        (document.getElementById("pesquisaMenu")?.value || "")
+        .toLowerCase();
+
+    const categorias=DB.get("gs_categories",[]);
+
+    const divCategorias=document.getElementById("categoriasMenu");
+
+    divCategorias.innerHTML="";
+
+    categorias.forEach(categoria=>{
+
+        const btn=document.createElement("button");
+
+        btn.className="btn";
+        btn.style.margin="4px";
+        btn.textContent=categoria;
+
+        btn.onclick=()=>{
+
+            document.getElementById("pesquisaMenu").value=categoria;
+            mostrarMenu();
+        };
+
+        divCategorias.appendChild(btn);
+    });
+
+    const lista=document.getElementById("listaMenu");
+
+    lista.innerHTML="";
+
+    const filtrados=pratos.filter(p=>
+        p.name.toLowerCase().includes(pesquisa) ||
+        p.category.toLowerCase().includes(pesquisa)
+    );
+
+    if(filtrados.length===0){
+
+        lista.innerHTML=`
+            <div class="card">
+                <h3>Nenhum prato encontrado.</h3>
+            </div>
+        `;
+
+        return;
+    }
+
+    filtrados.forEach(prato=>{
+
+        const div=document.createElement("div");
+
+        div.className="prato";
+
+        let adicionais="";
+
+        if(prato.addons && prato.addons.length){
+
+            adicionais=`
+                <h4>Adicionais</h4>
+                ${prato.addons.map((a,i)=>`
+                    <label class="adicional">
+                        <input
+                            type="checkbox"
+                            class="addon-${prato.id}"
+                            value="${i}"
+                        >
+                        ${safe(a.name)}
+                        + ${Number(a.price).toFixed(2)} €
+                    </label>
+                `).join("")}
+            `;
+        }
+
+        div.innerHTML=`
+            <h3>${safe(prato.name)}</h3>
+
+            <p>${safe(prato.description || "")}</p>
+
+            <div class="preco">
+                ${Number(prato.price).toFixed(2)} €
+            </div>
+
+            ${adicionais}
+
+            <button
+                class="btn-verde"
+                onclick="adicionarAoCarrinho(${prato.id},this)"
+            >
+                Adicionar ao pedido
+            </button>
+        `;
+
+        lista.appendChild(div);
+    });
+}
+
+
+/* =========================================================
+   CARRINHO
+   ========================================================= */
+
+function adicionarAoCarrinho(id,botao){
+
+    const pratos=obterMenu();
+
+    const prato=pratos.find(p=>p.id===id);
+
+    if(!prato) return;
+
+    const container=botao.closest(".prato");
+
+    const checks=container.querySelectorAll(
+        ".addon-"+id+":checked"
+    );
+
+    const adicionais=[];
+
+    checks.forEach(check=>{
+
+        const indice=Number(check.value);
+
+        adicionais.push({
+            name:prato.addons[indice].name,
+            price:Number(prato.addons[indice].price)
+        });
+    });
+
+    /*
+       IMPORTANTE:
+       Cada clique cria um NOVO item.
+       Portanto duas Francesinhas podem ter
+       adicionais diferentes.
+    */
+
+    cart.push({
+
+        cartId:Date.now()+"_"+Math.random(),
+
+        dishId:prato.id,
+
+        name:prato.name,
+
+        basePrice:Number(prato.price),
+
+        addons:adicionais
+    });
+
+    mostrarCarrinho();
+
+    alert(
+        prato.name+
+        " foi adicionado ao pedido."
+    );
+}
+
+
+function calcularTotal(){
+
+    return cart.reduce((total,item)=>{
+
+        total+=Number(item.basePrice);
+
+        item.addons.forEach(a=>{
+            total+=Number(a.price);
+        });
+
+        return total;
+
+    },0);
+}
+
+
+function mostrarCarrinho(){
+
+    const div=document.getElementById("carrinho");
+
+    if(!div) return;
+
+    div.innerHTML="";
+
+    if(cart.length===0){
+
+        div.innerHTML=`
+            <p>O carrinho está vazio.</p>
+        `;
+
+    }else{
+
+        cart.forEach((item,index)=>{
+
+            const adicionais=item.addons.length
+                ? item.addons.map(a=>
+                    `${safe(a.name)} (+${Number(a.price).toFixed(2)} €)`
+                  ).join(", ")
+                : "Sem adicionais";
+
+            const totalItem=
+                Number(item.basePrice)+
+                item.addons.reduce(
+                    (s,a)=>s+Number(a.price),0
+                );
+
+            div.innerHTML+=`
+
+                <div class="carrinho-item">
+
+                    <strong>
+                        ${index+1}. ${safe(item.name)}
+                    </strong>
+
+                    <p>
+                        ${adicionais}
+                    </p>
+
+                    <strong>
+                        ${totalItem.toFixed(2)} €
+                    </strong>
+
+                    <br><br>
+
+                    <button
+                        class="btn-vermelho"
+                        onclick="removerDoCarrinho(${index})"
+                    >
+                        Remover
+                    </button>
+
+                </div>
+            `;
+        });
+    }
+
+    const total=calcularTotal();
+
+    document.getElementById("totalPedido")
+        .textContent=total.toFixed(2)+" €";
+
+    const pessoas=Math.max(
+        1,
+        Number(
+            document.getElementById("dividirPessoas")?.value || 1
+        )
+    );
+
+    document.getElementById("valorPessoa")
+        .textContent=(total/pessoas).toFixed(2)+" €";
+}
+
+
+function removerDoCarrinho(index){
+
+    cart.splice(index,1);
+
+    mostrarCarrinho();
+}
+
+
+/* =========================================================
+   PEDIDOS
+   ========================================================= */
+
+function enviarPedido(){
+
+    if(cart.length===0){
+
+        alert("Adiciona pelo menos um prato.");
+
+        return;
+    }
+
+    const nome=
+        document.getElementById("nomePedido").value.trim();
+
+    const mesa=
+        document.getElementById("mesaPedido").value;
+
+    if(!nome || !mesa){
+
+        alert("Preenche o nome e escolhe a mesa.");
+
+        return;
+    }
+
+    const pedidos=DB.get("gs_orders",[]);
+
+    const numero=
+        "GS-"+Date.now();
+
+    const total=calcularTotal();
+
+    const pessoas=Math.max(
+        1,
+        Number(
+            document.getElementById("dividirPessoas").value || 1
+        )
+    );
+
+    const pedido={
+
+        id:numero,
+
+        name:nome,
+
+        table:Number(mesa),
+
+        people:pessoas,
+
+        items:JSON.parse(JSON.stringify(cart)),
+
+        total:Number(total.toFixed(2)),
+
+        status:"Pedido recebido",
+
+        date:new Date().toLocaleString("pt-PT")
+    };
+
+    pedidos.push(pedido);
+
+    DB.set("gs_orders",pedidos);
+
+    cart=[];
+
+    mostrarCarrinho();
+
+    document.getElementById("numeroAcompanhar").value=numero;
+
+    alert(
+        "Pedido enviado!\n\nNúmero do pedido: "+
+        numero
+    );
+
+    mostrarPagina("acompanhar");
+}
+
+
+function acompanharPedido(){
+
+    const numero=
+        document.getElementById("numeroAcompanhar")
+        .value.trim();
+
+    const pedidos=DB.get("gs_orders",[]);
+
+    const pedido=pedidos.find(p=>p.id===numero);
+
+    const resultado=
+        document.getElementById("resultadoAcompanhar");
+
+    if(!pedido){
+
+        resultado.innerHTML=`
+            <div class="erro">
+                Pedido não encontrado.
+            </div>
+        `;
+
+        return;
+    }
+
+    resultado.innerHTML=`
+
+        <div class="sucesso">
+
+            <h3>Pedido ${safe(pedido.id)}</h3>
+
+            <p>
+                <strong>Mesa:</strong>
+                ${safe(pedido.table)}
+            </p>
+
+            <p>
+                <strong>Estado:</strong>
+                <span class="badge">
+                    ${safe(pedido.status)}
+                </span>
+            </p>
+
+            <p>
+                <strong>Total:</strong>
+                ${Number(pedido.total).toFixed(2)} €
+            </p>
+
+            <p>
+                ${safe(pedido.date)}
+            </p>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   RESERVAS
+   ========================================================= */
+
+function fazerReserva(){
+
+    const nome=
+        document.getElementById("nomeReserva")
+        .value.trim();
+
+    const data=
+        document.getElementById("dataReserva").value;
+
+    const hora=
+        document.getElementById("horaReserva").value;
+
+    const pessoas=
+        Number(document.getElementById("pessoasReserva").value);
+
+    const mesa=
+        Number(document.getElementById("mesaReserva").value);
+
+    if(!nome || !data || !hora || !mesa){
+
+        alert("Preenche todos os campos.");
+
+        return;
+    }
+
+    const reservas=DB.get("gs_reservations",[]);
+
+    const ocupada=reservas.some(r=>
+        r.date===data &&
+        r.time===hora &&
+        Number(r.table)===mesa
+    );
+
+    if(ocupada){
+
+        document.getElementById("resultadoReserva").innerHTML=`
+            <div class="erro">
+                Essa mesa já está reservada para essa data e hora.
+            </div>
+        `;
+
+        return;
+    }
+
+    reservas.push({
+
+        id:"R-"+Date.now(),
+
+        name:nome,
+
+        date:data,
+
+        time:hora,
+
+        people:pessoas,
+
+        table:mesa
+    });
+
+    DB.set("gs_reservations",reservas);
+
+    document.getElementById("resultadoReserva").innerHTML=`
+        <div class="sucesso">
+            Reserva realizada com sucesso!
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   FUNCIONÁRIO
+   ========================================================= */
+
+function chamarFuncionario(){
+
+    const mesa=
+        Number(document.getElementById("mesaFuncionario").value);
+
+    const motivo=
+        document.getElementById("motivoFuncionario").value;
+
+    const mensagem=
+        document.getElementById("mensagemFuncionario")
+        .value.trim();
+
+    if(!mesa){
+
+        alert("Escolhe a mesa.");
+
+        return;
+    }
+
+    const chamadas=DB.get("gs_calls",[]);
+
+    const existente=chamadas.find(c=>
+        Number(c.table)===mesa &&
+        c.status==="Pendente"
+    );
+
+    if(existente){
+
+        alert(
+            "Já existe uma chamada pendente para esta mesa."
+        );
+
+        return;
+    }
+
+    chamadas.push({
+
+        id:"CH-"+Date.now(),
+
+        table:mesa,
+
+        reason:motivo,
+
+        message:mensagem,
+
+        status:"Pendente",
+
+        date:new Date().toLocaleString("pt-PT")
+    });
+
+    DB.set("gs_calls",chamadas);
+
+    document.getElementById("resultadoFuncionario").innerHTML=`
+        <div class="sucesso">
+            Funcionário chamado.
+            Por favor aguarde.
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   APOIO
+   ========================================================= */
+
+function mostrarOutroTopico(){
+
+    const topico=
+        document.getElementById("topicoApoio").value;
+
+    document.getElementById("outroTopicoBox")
+        .style.display=
+        topico==="Outro" ? "block" : "none";
+}
+
+
+function enviarApoio(){
+
+    const nome=
+        document.getElementById("nomeApoio")
+        .value.trim();
+
+    const pedido=
+        document.getElementById("pedidoApoio")
+        .value.trim();
+
+    const topico=
+        document.getElementById("topicoApoio")
+        .value;
+
+    const outro=
+        document.getElementById("outroTopico")
+        .value.trim();
+
+    const mensagem=
+        document.getElementById("mensagemApoio")
+        .value.trim();
+
+    if(!nome || !mensagem){
+
+        alert("Preenche o nome e a mensagem.");
+
+        return;
+    }
+
+    let assunto=topico;
+
+    if(topico==="Outro"){
+
+        if(!outro){
+
+            alert("Escreve o assunto.");
+
+            return;
+        }
+
+        assunto=outro;
+    }
+
+    const suporte=DB.get("gs_support",[]);
+
+    const ticket="AT-"+Date.now();
+
+    suporte.push({
+
+        id:ticket,
+
+        name:nome,
+
+        order:pedido,
+
+        topic:assunto,
+
+        message:mensagem,
+
+        response:"",
+
+        status:"Pendente",
+
+        date:new Date().toLocaleString("pt-PT")
+    });
+
+    DB.set("gs_support",suporte);
+
+    document.getElementById("resultadoApoio").innerHTML=`
+        <div class="sucesso">
+
+            <h3>Pedido enviado!</h3>
+
+            <p>
+                Guarda este número:
+            </p>
+
+            <strong>${ticket}</strong>
+
+            <p>
+                Podes utilizá-lo para consultar a resposta.
+            </p>
+
+        </div>
+    `;
+}
+
+
+function consultarTicket(){
+
+    const id=
+        document.getElementById("consultarTicket")
+        .value.trim();
+
+    const suporte=DB.get("gs_support",[]);
+
+    const ticket=suporte.find(t=>t.id===id);
+
+    const resultado=
+        document.getElementById("resultadoTicket");
+
+    if(!ticket){
+
+        resultado.innerHTML=`
+            <div class="erro">
+                Ticket não encontrado.
+            </div>
+        `;
+
+        return;
+    }
+
+    resultado.innerHTML=`
+
+        <div class="card">
+
+            <h3>${safe(ticket.topic)}</h3>
+
+            <p>
+                <strong>Estado:</strong>
+                ${safe(ticket.status)}
+            </p>
+
+            <p>
+                <strong>Mensagem:</strong><br>
+                ${safe(ticket.message)}
+            </p>
+
+            <p>
+                <strong>Resposta do Guarda Sol:</strong><br>
+                ${
+                    ticket.response
+                    ? safe(ticket.response)
+                    : "Ainda não existe resposta."
+                }
+            </p>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   RECLAMAÇÕES
+   ========================================================= */
+
+function enviarReclamacao(){
+
+    const nome=
+        document.getElementById("nomeReclamacao")
+        .value.trim();
+
+    const mensagem=
+        document.getElementById("mensagemReclamacao")
+        .value.trim();
+
+    if(!nome || !mensagem){
+
+        alert("Preenche os campos.");
+
+        return;
+    }
+
+    const reclamacoes=
+        DB.get("gs_complaints",[]);
+
+    reclamacoes.push({
+
+        id:"RC-"+Date.now(),
+
+        name:nome,
+
+        message:mensagem,
+
+        date:new Date().toLocaleString("pt-PT")
+    });
+
+    DB.set("gs_complaints",reclamacoes);
+
+    document.getElementById("resultadoReclamacao").innerHTML=`
+        <div class="sucesso">
+            Obrigado. A tua mensagem foi enviada.
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+function entrarAdmin(){
+
+    const pin=
+        document.getElementById("pinAdmin").value;
+
+    const correto=
+        localStorage.getItem("gs_admin_pin");
+
+    if(pin===correto){
+
+        document.getElementById("loginAdmin")
+            .style.display="none";
+
+        document.getElementById("painelAdmin")
+            .style.display="block";
+
+        atualizarAdmin();
+
+    }else{
+
+        document.getElementById("erroAdmin").innerHTML=`
+            <div class="erro">
+                Código incorreto.
+            </div>
+        `;
+    }
+}
+
+
+function atualizarAdmin(){
+
+    mostrarCategoriasAdmin();
+
+    atualizarCategoriaSelect();
+
+    mostrarPratosAdmin();
+
+    mostrarAdminPedidos();
+
+    mostrarAdminReservas();
+
+    mostrarAdminChamadas();
+
+    mostrarAdminApoio();
+
+    mostrarAdminReclamacoes();
+
+    atualizarEstatisticas();
+}
+
+
+/* =========================================================
+   CATEGORIAS
+   ========================================================= */
+
+function atualizarCategoriaSelect(){
+
+    const select=
+        document.getElementById("novoPratoCategoria");
+
+    const categorias=
+        DB.get("gs_categories",[]);
+
+    select.innerHTML="";
+
+    categorias.forEach(c=>{
+
+        const option=document.createElement("option");
+
+        option.value=c;
+        option.textContent=c;
+
+        select.appendChild(option);
+    });
+}
+
+
+function adicionarCategoria(){
+
+    const input=
+        document.getElementById("novaCategoria");
+
+    const nome=input.value.trim();
+
+    if(!nome) return;
+
+    const categorias=
+        DB.get("gs_categories",[]);
+
+    if(categorias.includes(nome)){
+
+        alert("Essa categoria já existe.");
+
+        return;
+    }
+
+    categorias.push(nome);
+
+    DB.set("gs_categories",categorias);
+
+    input.value="";
+
+    atualizarAdmin();
+
+    mostrarMenu();
+}
+
+
+function mostrarCategoriasAdmin(){
+
+    const div=
+        document.getElementById("listaCategoriasAdmin");
+
+    const categorias=
+        DB.get("gs_categories",[]);
+
+    div.innerHTML="";
+
+    categorias.forEach((categoria,index)=>{
+
+        div.innerHTML+=`
+
+            <div class="carrinho-item">
+
+                <strong>
+                    ${safe(categoria)}
+                </strong>
+
+                <button
+                    class="btn-amarelo"
+                    onclick="renomearCategoria(${index})"
+                >
+                    Renomear
+                </button>
+
+                <button
+                    class="btn-vermelho"
+                    onclick="eliminarCategoria(${index})"
+                >
+                    Eliminar
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+
+function renomearCategoria(index){
+
+    const categorias=
+        DB.get("gs_categories",[]);
+
+    const antigo=categorias[index];
+
+    const novo=prompt(
+        "Novo nome:",
+        antigo
+    );
+
+    if(!novo || !novo.trim()) return;
+
+    const nome=novo.trim();
+
+    const pratos=obterMenu();
+
+    pratos.forEach(p=>{
+
+        if(p.category===antigo){
+            p.category=nome;
+        }
+    });
+
+    categorias[index]=nome;
+
+    DB.set("gs_categories",categorias);
+
+    DB.set("gs_dishes",pratos);
+
+    atualizarAdmin();
+
+    mostrarMenu();
+}
+
+
+function eliminarCategoria(index){
+
+    const categorias=
+        DB.get("gs_categories",[]);
+
+    const nome=categorias[index];
+
+    const pratos=obterMenu();
+
+    const usada=pratos.some(p=>
+        p.category===nome
+    );
+
+    if(usada){
+
+        alert(
+            "Não podes eliminar esta categoria porque existem pratos nela."
+        );
+
+        return;
+    }
+
+    if(!confirm("Eliminar categoria?")) return;
+
+    categorias.splice(index,1);
+
+    DB.set("gs_categories",categorias);
+
+    atualizarAdmin();
+
+    mostrarMenu();
+}
+
+
+/* =========================================================
+   ADICIONAIS
+   ========================================================= */
+
+function adicionarCampoAdicional(
+    nome="",
+    preco=""
+){
+
+    const div=
+        document.getElementById("novosAdicionais");
+
+    const bloco=document.createElement("div");
+
+    bloco.className="adicional";
+
+    bloco.innerHTML=`
+
+        <input
+            class="campoAddonNome"
+            placeholder="Nome do adicional"
+            value="${safe(nome)}"
+        >
+
+        <input
+            class="campoAddonPreco"
+            type="number"
+            step="0.01"
+            placeholder="Preço"
+            value="${preco}"
+        >
+
+        <button
+            class="btn-vermelho"
+            onclick="this.parentElement.remove()"
+        >
+            Remover
+        </button>
+    `;
+
+    div.appendChild(bloco);
+}
+
+
+/* =========================================================
+   CRIAR PRATO
+   ========================================================= */
+
+function adicionarPrato(){
+
+    const nome=
+        document.getElementById("novoPratoNome")
+        .value.trim();
+
+    const categoria=
+        document.getElementById("novoPratoCategoria")
+        .value;
+
+    const descricao=
+        document.getElementById("novoPratoDescricao")
+        .value.trim();
+
+    const preco=
+        Number(
+            document.getElementById("novoPratoPreco").value
+        );
+
+    const custo=
+        Number(
+            document.getElementById("novoPratoCusto").value || 0
+        );
+
+    if(!nome || !categoria || !preco){
+
+        alert("Preenche nome, categoria e preço.");
+
+        return;
+    }
+
+    const addons=[];
+
+    document
+        .querySelectorAll("#novosAdicionais .adicional")
+        .forEach(bloco=>{
+
+            const nomeAddon=
+                bloco.querySelector(".campoAddonNome")
+                .value.trim();
+
+            const precoAddon=
+                Number(
+                    bloco.querySelector(".campoAddonPreco")
+                    .value || 0
+                );
+
+            if(nomeAddon){
+
+                addons.push({
+                    name:nomeAddon,
+                    price:precoAddon
+                });
+            }
+        });
+
+    const pratos=obterMenu();
+
+    pratos.push({
+
+        id:Date.now(),
+
+        name:nome,
+
+        category:categoria,
+
+        description:descricao,
+
+        price:preco,
+
+        cost:custo,
+
+        addons:addons
+    });
+
+    DB.set("gs_dishes",pratos);
+
+    document.getElementById("novoPratoNome").value="";
+
+    document.getElementById("novoPratoDescricao").value="";
+
+    document.getElementById("novoPratoPreco").value="";
+
+    document.getElementById("novoPratoCusto").value="";
+
+    document.getElementById("novosAdicionais").innerHTML="";
+
+    atualizarAdmin();
+
+    mostrarMenu();
+
+    alert("Prato criado com sucesso.");
+}
+
+
+/* =========================================================
+   ADMIN — PRATOS
+   ========================================================= */
+
+function mostrarPratosAdmin(){
+
+    const div=
+        document.getElementById("listaPratosAdmin");
+
+    const pratos=obterMenu();
+
+    div.innerHTML="";
+
+    pratos.forEach(prato=>{
+
+        div.innerHTML+=`
+
+            <div class="card">
+
+                <h3>${safe(prato.name)}</h3>
+
+                <p>
+                    Categoria:
+                    ${safe(prato.category)}
+                </p>
+
+                <p>
+                    Preço:
+                    ${Number(prato.price).toFixed(2)} €
+                </p>
+
+                <p>
+                    Custo:
+                    ${Number(prato.cost || 0).toFixed(2)} €
+                </p>
+
+                <p>
+                    Adicionais:
+                    ${prato.addons?.length || 0}
+                </p>
+
+                <button
+                    class="btn-amarelo"
+                    onclick="editarPrato(${prato.id})"
+                >
+                    Editar
+                </button>
+
+                <button
+                    class="btn-vermelho"
+                    onclick="eliminarPrato(${prato.id})"
+                >
+                    Eliminar
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+
+function editarPrato(id){
+
+    const pratos=obterMenu();
+
+    const prato=pratos.find(p=>p.id===id);
+
+    if(!prato) return;
+
+    const nome=prompt(
+        "Nome do prato:",
+        prato.name
+    );
+
+    if(nome===null) return;
+
+    const preco=prompt(
+        "Preço:",
+        prato.price
+    );
+
+    if(preco===null) return;
+
+    const descricao=prompt(
+        "Descrição:",
+        prato.description || ""
+    );
+
+    if(descricao===null) return;
+
+    prato.name=nome.trim();
+
+    prato.price=Number(preco);
+
+    prato.description=descricao;
+
+    DB.set("gs_dishes",pratos);
+
+    atualizarAdmin();
+
+    mostrarMenu();
+}
+
+
+function eliminarPrato(id){
+
+    if(!confirm("Eliminar este prato?")) return;
+
+    let pratos=obterMenu();
+
+    pratos=pratos.filter(p=>p.id!==id);
+
+    DB.set("gs_dishes",pratos);
+
+    atualizarAdmin();
+
+    mostrarMenu();
+}
+
+
+/* =========================================================
+   ADMIN — PEDIDOS
+   ========================================================= */
+
+function mostrarAdminPedidos(){
+
+    const div=
+        document.getElementById("adminPedidos");
+
+    const pedidos=
+        DB.get("gs_orders",[]);
+
+    div.innerHTML="";
+
+    if(!pedidos.length){
+
+        div.innerHTML="<p>Não existem pedidos.</p>";
+
+        return;
+    }
+
+    [...pedidos].reverse().forEach(pedido=>{
+
+        div.innerHTML+=`
+
+            <div class="card">
+
+                <h3>
+                    ${safe(pedido.id)}
+                </h3>
+
+                <p>
+                    Cliente:
+                    ${safe(pedido.name)}
+                </p>
+
+                <p>
+                    Mesa:
+                    ${safe(pedido.table)}
+                </p>
+
+                <p>
+                    Total:
+                    ${Number(pedido.total).toFixed(2)} €
+                </p>
+
+                <p>
+                    Estado:
+                    <strong>${safe(pedido.status)}</strong>
+                </p>
+
+                <select
+                    onchange="alterarEstadoPedido('${pedido.id}',this.value)"
+                >
+
+                    ${[
+                        "Pedido recebido",
+                        "Em preparação",
+                        "Pronto",
+                        "Entregue"
+                    ].map(status=>`
+
+                        <option
+                            ${pedido.status===status?"selected":""}
+                        >
+                            ${status}
+                        </option>
+
+                    `).join("")}
+
+                </select>
+
+                <details>
+
+                    <summary>Ver pratos</summary>
+
+                    ${pedido.items.map(item=>`
+
+                        <p>
+                            <strong>
+                                ${safe(item.name)}
+                            </strong>
+
+                            ${
+                                item.addons.length
+                                ? " — "+
+                                  item.addons.map(a=>
+                                      safe(a.name)
+                                  ).join(", ")
+                                : ""
+                            }
+                        </p>
+
+                    `).join("")}
+
+                </details>
+
+            </div>
+        `;
+    });
+}
+
+
+function alterarEstadoPedido(id,status){
+
+    const pedidos=
+        DB.get("gs_orders",[]);
+
+    const pedido=
+        pedidos.find(p=>p.id===id);
+
+    if(!pedido) return;
+
+    pedido.status=status;
+
+    DB.set("gs_orders",pedidos);
+
+    atualizarEstatisticas();
+}
+
+
+/* =========================================================
+   ADMIN — RESERVAS
+   ========================================================= */
+
+function mostrarAdminReservas(){
+
+    const div=
+        document.getElementById("adminReservas");
+
+    const reservas=
+        DB.get("gs_reservations",[]);
+
+    div.innerHTML="";
+
+    if(!reservas.length){
+
+        div.innerHTML="<p>Não existem reservas.</p>";
+
+        return;
+    }
+
+    [...reservas].reverse().forEach(r=>{
+
+        div.innerHTML+=`
+
+            <div class="card">
+
+                <h3>Mesa ${safe(r.table)}</h3>
+
+                <p>
+                    ${safe(r.name)}
+                </p>
+
+                <p>
+                    ${safe(r.date)}
+                    às
+                    ${safe(r.time)}
+                </p>
+
+                <p>
+                    ${safe(r.people)} pessoas
+                </p>
+
+                <button
+                    class="btn-vermelho"
+                    onclick="eliminarReserva('${r.id}')"
+                >
+                    Eliminar
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+
+function eliminarReserva(id){
+
+    if(!confirm("Eliminar reserva?")) return;
+
+    let reservas=
+        DB.get("gs_reservations",[]);
+
+    reservas=reservas.filter(r=>r.id!==id);
+
+    DB.set("gs_reservations",reservas);
+
+    atualizarAdmin();
+}
+
+
+/* =========================================================
+   ADMIN — CHAMADAS
+   ========================================================= */
+
+function mostrarAdminChamadas(){
+
+    const div=
+        document.getElementById("adminChamadas");
+
+    const chamadas=
+        DB.get("gs_calls",[]);
+
+    div.innerHTML="";
+
+    if(!chamadas.length){
+
+        div.innerHTML="<p>Não existem chamadas.</p>";
+
+        return;
+    }
+
+    [...chamadas].reverse().forEach(c=>{
+
+        div.innerHTML+=`
+
+            <div class="card">
+
+                <h3>
+                    🔔 Mesa ${safe(c.table)}
+                </h3>
+
+                <p>
+                    Motivo:
+                    ${safe(c.reason)}
+                </p>
+
+                <p>
+                    ${safe(c.message || "")}
+                </p>
+
+                <p>
+                    Estado:
+                    <strong>${safe(c.status)}</strong>
+                </p>
+
+                ${
+                    c.status==="Pendente"
+                    ? `
+                        <button
+                            class="btn-verde"
+                            onclick="atenderChamada('${c.id}')"
+                        >
+                            Atendida
+                        </button>
+                    `
+                    : `
+                        <button
+                            class="btn-vermelho"
+                            onclick="eliminarChamada('${c.id}')"
+                        >
+                            Eliminar
+                        </button>
+                    `
+                }
+
+            </div>
+        `;
+    });
+}
+
+
+function atenderChamada(id){
+
+    const chamadas=
+        DB.get("gs_calls",[]);
+
+    const chamada=
+        chamadas.find(c=>c.id===id);
+
+    if(!chamada) return;
+
+    chamada.status="Atendida";
+
+    DB.set("gs_calls",chamadas);
+
+    atualizarAdmin();
+}
+
+
+function eliminarChamada(id){
+
+    let chamadas=
+        DB.get("gs_calls",[]);
+
+    chamadas=
+        chamadas.filter(c=>c.id!==id);
+
+    DB.set("gs_calls",chamadas);
+
+    atualizarAdmin();
+}
+
+
+/* =========================================================
+   ADMIN — APOIO
+   ========================================================= */
+
+function mostrarAdminApoio(){
+
+    const div=
+        document.getElementById("adminApoio");
+
+    const suporte=
+        DB.get("gs_support",[]);
+
+    div.innerHTML="";
+
+    if(!suporte.length){
+
+        div.innerHTML="<p>Não existem tickets.</p>";
+
+        return;
+    }
+
+    [...suporte].reverse().forEach(t=>{
+
+        div.innerHTML+=`
+
+            <div class="card">
+
+                <h3>
+                    🎫 ${safe(t.id)}
+                </h3>
+
+                <p>
+                    Cliente:
+                    ${safe(t.name)}
+                </p>
+
+                <p>
+                    Assunto:
+                    ${safe(t.topic)}
+                </p>
+
+                <p>
+                    Mensagem:
+                    ${safe(t.message)}
+                </p>
+
+                <label>Estado</label>
+
+                <select
+                    onchange="alterarEstadoApoio('${t.id}',this.value)"
+                >
+
+                    ${[
+                        "Pendente",
+                        "Em atendimento",
+                        "Resolvido"
+                    ].map(status=>`
+
+                        <option
+                            ${t.status===status?"selected":""}
+                        >
+                            ${status}
+                        </option>
+
+                    `).join("")}
+
+                </select>
+
+                <label>Resposta</label>
+
+                <textarea
+                    id="resposta-${t.id}"
+                >${safe(t.response || "")}</textarea>
+
+                <button
+                    class="btn-azul"
+                    onclick="responderApoio('${t.id}')"
+                >
+                    Guardar resposta
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+
+function alterarEstadoApoio(id,status){
+
+    const suporte=
+        DB.get("gs_support",[]);
+
+    const ticket=
+        suporte.find(t=>t.id===id);
+
+    if(!ticket) return;
+
+    ticket.status=status;
+
+    DB.set("gs_support",suporte);
+
+    atualizarAdmin();
+}
+
+
+function responderApoio(id){
+
+    const suporte=
+        DB.get("gs_support",[]);
+
+    const ticket=
+        suporte.find(t=>t.id===id);
+
+    if(!ticket) return;
+
+    const resposta=
+        document.getElementById(
+            "resposta-"+id
+        ).value;
+
+    ticket.response=resposta;
+
+    if(resposta.trim()){
+        ticket.status="Resolvido";
+    }
+
+    DB.set("gs_support",suporte);
+
+    atualizarAdmin();
+
+    alert("Resposta guardada.");
+}
+
+
+/* =========================================================
+   ADMIN — RECLAMAÇÕES
+   ========================================================= */
+
+function mostrarAdminReclamacoes(){
+
+    const div=
+        document.getElementById("adminReclamacoes");
+
+    const reclamacoes=
+        DB.get("gs_complaints",[]);
+
+    div.innerHTML="";
+
+    if(!reclamacoes.length){
+
+        div.innerHTML="<p>Não existem reclamações.</p>";
+
+        return;
+    }
+
+    [...reclamacoes].reverse().forEach(r=>{
+
+        div.innerHTML+=`
+
+            <div class="card">
+
+                <h3>${safe(r.name)}</h3>
+
+                <p>
+                    ${safe(r.message)}
+                </p>
+
+                <small>
+                    ${safe(r.date)}
+                </small>
+
+                <br><br>
+
+                <button
+                    class="btn-vermelho"
+                    onclick="eliminarReclamacao('${r.id}')"
+                >
+                    Eliminar
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+
+function eliminarReclamacao(id){
+
+    let reclamacoes=
+        DB.get("gs_complaints",[]);
+
+    reclamacoes=
+        reclamacoes.filter(r=>r.id!==id);
+
+    DB.set("gs_complaints",reclamacoes);
+
+    atualizarAdmin();
+}
+
+
+/* =========================================================
+   ESTATÍSTICAS
+   ========================================================= */
+
+function atualizarEstatisticas(){
+
+    const pedidos=
+        DB.get("gs_orders",[]);
+
+    const pratos=
+        obterMenu();
+
+    const vendas=
+        pedidos.reduce(
+            (s,p)=>s+Number(p.total || 0),
+            0
+        );
+
+    let custos=0;
+
+    let pessoas=0;
+
+    const contador={};
+
+    pedidos.forEach(p=>{
+
+        pessoas+=Number(p.people || 1);
+
+        p.items.forEach(item=>{
+
+            const prato=
+                pratos.find(x=>x.id===item.dishId);
+
+            if(prato){
+
+                custos+=Number(prato.cost || 0);
+            }
+
+            contador[item.name]=
+                (contador[item.name] || 0)+1;
+        });
+    });
+
+    let maisVendido="Nenhum";
+
+    let maior=0;
+
+    Object.keys(contador).forEach(nome=>{
+
+        if(contador[nome]>maior){
+
+            maior=contador[nome];
+
+            maisVendido=nome;
+        }
+    });
+
+    const lucro=vendas-custos;
+
+    document.getElementById("estatNumeroPedidos")
+        .textContent=pedidos.length;
+
+    document.getElementById("estatVendas")
+        .textContent=vendas.toFixed(2)+" €";
+
+    document.getElementById("estatCustos")
+        .textContent=custos.toFixed(2)+" €";
+
+    document.getElementById("estatLucro")
+        .textContent=lucro.toFixed(2)+" €";
+
+    document.getElementById("estatPessoas")
+        .textContent=pessoas;
+
+    document.getElementById("aconselhamento").innerHTML=
+        "⭐ Prato mais vendido: <strong>"+
+        safe(maisVendido)+
+        "</strong>";
+
+    const chamadas=
+        DB.get("gs_calls",[]);
+
+    const pendentesChamadas=
+        chamadas.filter(c=>
+            c.status==="Pendente"
+        ).length;
+
+    document.getElementById("contadorChamadas")
+        .textContent=pendentesChamadas;
+
+    const suporte=
+        DB.get("gs_support",[]);
+
+    const pendentesApoio=
+        suporte.filter(t=>
+            t.status!=="Resolvido"
+        ).length;
+
+    document.getElementById("contadorApoio")
+        .textContent=pendentesApoio;
+}
+
+
+/* =========================================================
+   ALTERAR PIN
+   ========================================================= */
+
+function alterarPin(){
+
+    const novo=
+        document.getElementById("novoPin")
+        .value.trim();
+
+    if(novo.length<4){
+
+        alert("O PIN deve ter pelo menos 4 caracteres.");
+
+        return;
+    }
+
+    localStorage.setItem(
+        "gs_admin_pin",
+        novo
+    );
+
+    document.getElementById("resultadoPin").innerHTML=`
+        <div class="sucesso">
+            PIN alterado com sucesso.
+        </div>
+    `;
+
+    document.getElementById("novoPin").value="";
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+criarMesas();
+
+mostrarMenu();
+
+mostrarCarrinho();
+
+
+/*
+   Atualização automática do painel administrativo.
+
+   Isto atualiza os dados deste navegador.
+   Para sincronização verdadeira entre vários dispositivos
+   seria necessária uma base de dados online.
+*/
+
+setInterval(()=>{
+
+    if(
+        document.getElementById("painelAdmin") &&
+        document.getElementById("painelAdmin").style.display==="block"
+    ){
+        atualizarAdmin();
+    }
+
+},5000);
+
+</script>
+
+</body>
+</html>
+```
